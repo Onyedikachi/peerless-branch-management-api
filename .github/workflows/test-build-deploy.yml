@@ -1,0 +1,81 @@
+name: Test, Build, Deploy
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+on:
+  pull_request:
+      types: [opened, synchronize, reopened, closed]
+      branches:
+        - dev
+        - dev2
+        - qa
+        - staging
+        - main
+  push:
+    branches:
+      - dev
+      - dev2
+      - qa
+      - staging
+      - main
+
+jobs:
+  code_quality:
+    uses: sterling-retailcore-team/workflow-templates/.github/workflows/code_quality.yml@main
+    secrets: inherit
+    with:
+      CODE_COVERAGE: '' # specify codebase for code coverage. e.g CODE_COVERAGE: 'node' CODE_COVERAGE: 'dotnet' or CODE_COVERAGE: 'python', e.t.c
+  build_image:
+    uses: sterling-retailcore-team/workflow-templates/.github/workflows/build.yml@main
+    needs: [code_quality]
+    if: |
+      always() &&
+      (!contains(needs.code_quality.result, 'failure') || !contains(needs.code_quality.result, 'cancelled'))
+    with:
+      GITHUB_REPOSITORY: ${GITHUB_REPOSITORY}
+      GITHUB_BASE_REF: ${GITHUB_BASE_REF}
+      GITHUB_SHA: ${GITHUB_SHA::8}
+      GITHUB_EVENT_NAME: ${GITHUB_EVENT_NAME}
+      USE_BUILDTIME_ARGS: false # toggle to use buildtime variables
+      DEPLOY_VARIANT_CONTAINER: false # toggle to build a variant
+      USE_VARIANT_BUILDTIME_ARGS: false # toggle to use buildtime variables for variants
+      VARIANT_DOCKERFILE_NAME: '' # name of the variant dockerfile
+      VARIANT_CONTAINER_NAME: '' # provide a name for the container variant if building one
+      MFE_CUSTOM_BUILD_SCRIPT: '' # use example below if you want to override the default MFE build script
+      # CUSTOM_BUILD_SCRIPT: |
+      #   yarn --ignore-scripts build:webpack
+      MFE: false # set to true for microfrontend repositories and false for microservices
+    secrets:
+      BUILDTIME_ARGS: '' # if using buildtime variables, specify secrets in this format "${{ secrets.example }}"
+      VARIANT_BUILDTIME_ARGS: '' # if using buildtime variables for the variant, specify secrets in this format "${{ secrets.example }}"
+      GH_ACTIONS_PAT: ${{ secrets.GH_ACTIONS_PAT }} # mandatory, do not remove
+
+  deploy_microservice:
+    uses: sterling-retailcore-team/workflow-templates/.github/workflows/deploy.yml@main
+    with:
+      GITHUB_REPOSITORY: ${GITHUB_REPOSITORY}
+      GITHUB_BASE_REF: ${GITHUB_BASE_REF}
+      GITHUB_SHA: ${GITHUB_SHA::8}
+      GITHUB_REPOSITORY_OWNER: ${GITHUB_REPOSITORY_OWNER}
+      GITHUB_EVENT_NAME: ${GITHUB_EVENT_NAME}
+      DEPLOY_VARIANT_CONTAINER: false # toggle to deploy a variant
+      VARIANT_CONTAINER_NAME: '' # provide a name for the container variant if deploying one
+      MFE: false # set to true for microfrontend repositories and false for microservices
+      MFE_PACKAGE_NAME: '' # for microfrontends, specify the package name to be used in the import-map
+    secrets: inherit
+    needs: build_image
+    if: |
+      always() &&
+      (!contains(needs.build_image.result, 'failure') ||
+      !contains(needs.build_image.result, 'cancelled'))
+
+  smoke_test:
+    uses: sterling-retailcore-team/workflow-templates/.github/workflows/smoke_tests.yml@main
+    with:
+      MICROSERVICE_URL: ${{ needs.deploy_microservice.outputs.MICROSERVICE_URL }}
+    secrets: inherit
+    needs: deploy_microservice
+    if: |
+      always() &&
+      (!contains(needs.deploy_microservice.result, 'failure') ||
+      !contains(needs.deploy_microservice.result, 'cancelled'))
+      
