@@ -23,7 +23,7 @@ jobs:
     uses: sterling-retailcore-team/workflow-templates/.github/workflows/code_quality.yml@main
     secrets: inherit
     with:
-      CODE_COVERAGE: '' # specify codebase for code coverage. e.g CODE_COVERAGE: 'node' CODE_COVERAGE: 'dotnet' or CODE_COVERAGE: 'python', e.t.c
+      CODE_COVERAGE: 'dotnet' # specify codebase for code coverage. e.g CODE_COVERAGE: 'node' CODE_COVERAGE: 'dotnet' or CODE_COVERAGE: 'python', e.t.c
   build_image:
     uses: sterling-retailcore-team/workflow-templates/.github/workflows/build.yml@main
     needs: [code_quality]
@@ -40,7 +40,7 @@ jobs:
       USE_VARIANT_BUILDTIME_ARGS: false # toggle to use buildtime variables for variants
       VARIANT_DOCKERFILE_NAME: '' # name of the variant dockerfile
       VARIANT_CONTAINER_NAME: '' # provide a name for the container variant if building one
-      MFE_CUSTOM_BUILD_SCRIPT: '' # use example below if you want to override the default MFE build script
+      # MFE_CUSTOM_BUILD_SCRIPT: '' # use example below if you want to override the default MFE build script
       # CUSTOM_BUILD_SCRIPT: |
       #   yarn --ignore-scripts build:webpack
       MFE: false # set to true for microfrontend repositories and false for microservices
