@@ -12,14 +12,12 @@ namespace Retail.Branch.Core.Entities
         [Key]
         public string User_Id { get; set; }
         public string User_Name { get; set; }
-        [Required]
         public string Action_Type { get; set; }
         public int Clicks { get; set; }
         public string status { get; set; } = "false";
         public string SourceIPs { get; set; }
         public string BranchCode { get; set; }
         public DateTime LoginTime { get; set; }
-        [Required]
         public DateTime Created_At { get; set; } = DateTime.UtcNow;
     }
 }

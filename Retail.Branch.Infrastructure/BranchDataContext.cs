@@ -20,9 +20,7 @@ namespace Retail.Branch.Infrastructure
         public DbSet<BranchRequest> BranchRequests { get; set; }
         public DbSet<BranchRequestLog> BranchRequestLogs { get; set; }
         public DbSet<BranchMember> BranchMembers { get; set; }
-        public DbSet<BranchBranchRequest> BranchBranchRequest { get; set; }
-        public DbSet<AuditLogs> AuditLogs { get; set; }
-
+        public DbSet<BranchBranchRequest> BranchBranchRequest { get; set; } 
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

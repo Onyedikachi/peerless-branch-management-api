@@ -22,45 +22,6 @@ namespace Retail.Branch.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Retail.Branch.Core.Entities.AuditLogs", b =>
-                {
-                    b.Property<string>("User_Id")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Action_Type")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("BranchCode")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Clicks")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("Created_At")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("LoginTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("SourceIPs")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("User_Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("status")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("User_Id");
-
-                    b.ToTable("AuditLogs");
-                });
-
             modelBuilder.Entity("Retail.Branch.Core.Entities.Branch", b =>
                 {
                     b.Property<Guid>("Id")
