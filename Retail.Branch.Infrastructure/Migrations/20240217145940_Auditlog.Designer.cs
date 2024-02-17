@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Retail.Branch.Infrastructure;
@@ -11,9 +12,10 @@ using Retail.Branch.Infrastructure;
 namespace Retail.Branch.Infrastructure.Migrations
 {
     [DbContext(typeof(BranchDataContext))]
-    partial class BranchDataContextModelSnapshot : ModelSnapshot
+    [Migration("20240217145940_Auditlog")]
+    partial class Auditlog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
