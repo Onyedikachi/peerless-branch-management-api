@@ -97,12 +97,16 @@ namespace retail_teams_management_api.Controllers.v1
         [HttpGet("template")]
         public async Task<IActionResult> GetTemplate()
         {
-            var template = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "wwwroot", "data", "bulktemplate.xlsx"));
-
-            var filebytes = System.IO.File.ReadAllBytes(template);
-            return File(filebytes, "application/octet-stream", "bulktemplate.xlsx");
+            //var template = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "wwwroot", "data", "bulktemplate.xlsx"));
+            //var filebytes = System.IO.File.ReadAllBytes(template);
+            //return File(filebytes, "application/octet-stream", "bulktemplate.xlsx");
+            var templatePath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "wwwroot", "data", "bulktemplate.csv"));
+            var fileBytes = System.IO.File.ReadAllBytes(templatePath);
+            return File(fileBytes, "text/csv", "bulktemplate.csv");
 
         }
+
+
 
         [BranchPermission(BranchPermissions.FAKE)]
         [HttpGet("atest")]
