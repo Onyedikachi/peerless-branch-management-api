@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Retail.Branch.Core.Common;
@@ -8,7 +11,7 @@ using Retail.Branch.Services.BranchModule;
 using Retail.Branch.Services.BranchModule.Models;
 using Retail.Branch.Services.BranchModule.QueryFilters;
 using Retail.Branch.Services.BranchRequestModule;
-using Retail.Branch.Services.BranchRequestModule.QueryFilter;
+using retail_teams_management_api.Controllers.v1;
 using System.ComponentModel.DataAnnotations;
 using Xunit;
 
@@ -340,6 +343,36 @@ namespace Retail.Branch.ServicesTests.BranchModule
 
         }
 
+        [Fact]
+        public async Task GetTemplate_ReturnsFileResult()
+        {
+            // Arrange
+            var webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
+            webHostEnvironmentMock.Setup(m => m.ContentRootPath).Returns("\"C:\\Users\\hp\\Documents\\Seabas\\retail-teams-management-api\\wwwroot\\data\\Bulk Branch Creation.csv");
+
+            var httpContextMock = new Mock<HttpContext>();
+            httpContextMock.SetupGet(c => c.RequestServices)
+                           .Returns(Mock.Of<IServiceProvider>(s => s.GetService(typeof(IWebHostEnvironment)) == webHostEnvironmentMock.Object));
+
+            var controller = new BranchController(null, null)
+            {
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = httpContextMock.Object
+                }
+            };
+
+            // Act
+            var result = await controller.GetTemplate();
+
+            // Assert
+            Assert.IsType<FileContentResult>(result);
+
+            var fileResult = result as FileContentResult;
+            Assert.NotNull(fileResult);
+            Assert.Equal("Bulk Branch Creation.csv", fileResult.FileDownloadName);
+            Assert.Equal("text/csv", fileResult.ContentType);
+        }
 
 
     }
