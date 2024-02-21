@@ -11,7 +11,6 @@ using Retail.Branch.Services.BranchModule;
 using Retail.Branch.Services.BranchModule.Models;
 using Retail.Branch.Services.BranchModule.QueryFilters;
 using Retail.Branch.Services.BranchRequestModule;
-using Retail.Branch.Services.BranchRequestModule.QueryFilter;
 using retail_teams_management_api.Controllers.v1;
 using System.ComponentModel.DataAnnotations;
 using Xunit;
