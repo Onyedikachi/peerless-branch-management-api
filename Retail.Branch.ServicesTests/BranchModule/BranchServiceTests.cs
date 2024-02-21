@@ -349,7 +349,7 @@ namespace Retail.Branch.ServicesTests.BranchModule
         {
             // Arrange
             var webHostEnvironmentMock = new Mock<IWebHostEnvironment>();
-            webHostEnvironmentMock.Setup(m => m.ContentRootPath).Returns("\"C:\\Users\\hp\\Documents\\Seabas\\retail-teams-management-api\\wwwroot\\data\\bulktemplate.csv");
+            webHostEnvironmentMock.Setup(m => m.ContentRootPath).Returns("\"C:\\Users\\hp\\Documents\\Seabas\\retail-teams-management-api\\wwwroot\\data\\Bulk Branch Creation.csv");
 
             var httpContextMock = new Mock<HttpContext>();
             httpContextMock.SetupGet(c => c.RequestServices)
@@ -371,7 +371,7 @@ namespace Retail.Branch.ServicesTests.BranchModule
 
             var fileResult = result as FileContentResult;
             Assert.NotNull(fileResult);
-            Assert.Equal("bulktemplate.csv", fileResult.FileDownloadName);
+            Assert.Equal("Bulk Branch Creation.csv", fileResult.FileDownloadName);
             Assert.Equal("text/csv", fileResult.ContentType);
         }
 

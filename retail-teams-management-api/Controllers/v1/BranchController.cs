@@ -100,9 +100,9 @@ namespace retail_teams_management_api.Controllers.v1
             //var template = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "wwwroot", "data", "bulktemplate.xlsx"));
             //var filebytes = System.IO.File.ReadAllBytes(template);
             //return File(filebytes, "application/octet-stream", "bulktemplate.xlsx");
-            var templatePath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "wwwroot", "data", "bulktemplate.csv"));
+            var templatePath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "wwwroot", "data", "Bulk Branch Creation.csv"));
             var fileBytes = System.IO.File.ReadAllBytes(templatePath);
-            return File(fileBytes, "text/csv", "bulktemplate.csv");
+            return File(fileBytes, "text/csv", "Bulk Branch Creation.csv");
 
         }
 
